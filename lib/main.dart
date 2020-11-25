@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
-import './ListProvider.dart';
-import './HomeScreen.dart';
+import 'ListView.dart';
+import 'Model.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  var state = ListProvider();
+  var state = MyState();
   runApp(
-    ChangeNotifierProvider(create: (context) => state, child: MyApp()),
+    ChangeNotifierProvider(
+      create: (context) => state,
+      child: MyApp(),
+    ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Todo Application',
-      home: HomeScreen(),
+      title: 'To do app',
+      theme: ThemeData(
+        primarySwatch: Colors.grey,
+        visualDensity: VisualDensity.comfortable,
+      ),
+      home: Listview(),
     );
   }
 }
