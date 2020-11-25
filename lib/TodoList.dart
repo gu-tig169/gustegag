@@ -43,12 +43,9 @@ class TodoList extends StatelessWidget {
                     decorationThickness: 2.18)),
             value: task.status,
             onChanged: (bool newValue) {
-              //Checkar i checkbox med provider.
               var state = Provider.of<MyState>(context, listen: false);
               state.toggleDone(task, newValue);
             },
-
-            //Genom att man trycket på knappen raderas en task här med provider.
             secondary: IconButton(
               icon: Icon(Icons.close, color: Colors.red[100]),
               onPressed: () {
