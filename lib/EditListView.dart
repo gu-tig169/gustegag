@@ -95,7 +95,6 @@ class EditListviewState extends State<EditListview> {
     );
   }
 
-  // Text inmatningsfälet för att lägga till task med controller
   Widget _textInputField() {
     return Container(
         child: TextField(

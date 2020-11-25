@@ -5,8 +5,6 @@ import './Model.dart';
 import './Constants.dart';
 import 'TodoList.dart';
 
-// Fösta vyn
-
 class Listview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
