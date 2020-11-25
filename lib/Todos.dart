@@ -1,9 +1,9 @@
 class Tasks {
-  String title;
-  bool isChecked;
+  String message;
+  bool status = false;
 
-  Tasks(String title) {
-    this.title = title;
-    isChecked = false;
-  }
+  Tasks({
+    this.message,
+    this.status = false,
+  });
 }

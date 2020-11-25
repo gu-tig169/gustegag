@@ -1,21 +1,38 @@
+import 'package:app_todo/Todos.dart';
 import 'package:flutter/material.dart';
 import 'ListProvider.dart';
-import 'package:provider/provider.dart';
 
 class AddScreen extends StatefulWidget {
+  final Tasks task;
+
+  AddScreen(this.task);
+
   @override
-  _AddScreenState createState() => _AddScreenState();
+  State<StatefulWidget> createState() {
+    return _AddScreenState(task);
+  }
 }
 
 class _AddScreenState extends State<AddScreen> {
-  TextEditingController _Title = TextEditingController();
+  String message;
+  bool status;
 
-  @override
-  void dispose() {
-    _Title.dispose();
-    super.dispose();
+  TextEditingController textEditingController;
+
+  _AddScreenState(Tasks task) {
+    this.message = task.message;
+    this.status = task.status;
+
+    textEditingController = TextEditingController(text: task.message);
+
+    textEditingController.addListener(() {
+      setState(() {
+        message = textEditingController.text;
+      });
+    });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color.fromARGB(225, 211, 196, 190),
@@ -60,7 +77,7 @@ class _AddScreenState extends State<AddScreen> {
   Widget _textField() {
     return Container(
         child: TextField(
-            controller: _Title,
+            controller: textEditingController,
             decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: 'e.g. work out',
@@ -70,24 +87,18 @@ class _AddScreenState extends State<AddScreen> {
 
   Widget _iconButton() {
     return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          FlatButton.icon(
-              icon: Icon(Icons.add_rounded, color: Colors.white),
-              label: Text('ADD', style: TextStyle(color: Colors.white)),
-              onPressed: () {
-                setState(
-                  () {
-                    _Title.text.trim().isEmpty
-                        ? _showSnackBar(context)
-                        : Provider.of<ListProvider>(context, listen: false)
-                            .addTasks(_Title.text);
-                    Navigator.of(context).pop();
-                  },
-                );
-              })
-        ]);
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        FlatButton.icon(
+          icon: Icon(Icons.add_rounded, color: Colors.white),
+          label: Text('ADD', style: TextStyle(color: Colors.white)),
+          onPressed: () {
+            Navigator.pop(context, Tasks(message: message, status: status));
+          },
+        )
+      ],
+    );
   }
 }
 

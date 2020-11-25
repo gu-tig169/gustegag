@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'Todos.dart';
+import 'FilterList.dart';
 
 class ListProvider extends ChangeNotifier {
-  List<Tasks> _tasks = new List<Tasks>();
+  List<Tasks> _list = [];
+  List<Tasks> get list => _list;
 
-  List<Tasks> get getTasks {
-    return _tasks;
-  }
-
-  void addTasks(String title) {
-    Tasks task = new Tasks(title);
-
-    _tasks.add(task);
-
+  void addTodo(Tasks todo) {
+    _list.add(todo);
     notifyListeners();
   }
 
-  void removeTasks(int index) {
-    _tasks.removeAt(index);
+  void removeTask(Tasks task) {
+    _list.remove(task);
+    notifyListeners();
+  }
+
+  void toggleDone(Tasks task, bool newValue) {
+    task.status = newValue;
     notifyListeners();
   }
 }
