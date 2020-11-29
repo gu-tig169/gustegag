@@ -46,7 +46,7 @@ class Listview extends StatelessWidget {
         ],
       ),
       body: Consumer<MyState>(
-        builder: (context, state, child) => TodoList(state.listFiltered),
+        builder: (context, state, child) => TodoList(state.list),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add, color: Colors.white),
