@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 
 void main() {
   var state = MyState();
+  state.getList();
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => state,
@@ -17,10 +19,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'To do app',
+      title: 'TODO APP',
       theme: ThemeData(
         primarySwatch: Colors.grey,
-        visualDensity: VisualDensity.comfortable,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Listview(),
     );

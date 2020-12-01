@@ -1,59 +1,76 @@
 import 'package:flutter/material.dart';
 import './Constants.dart';
+import 'Api.dart';
 
 class TodoTask {
   String message;
+  String taskId;
   bool status = false;
 
-  TodoTask({this.message, this.status});
+  TodoTask({this.message, this.status, this.taskId});
+
+  static Map<String, dynamic> toJson(TodoTask task) {
+    return {
+      'message': task.message,
+      'status': task.status,
+    };
+  }
+
+  static TodoTask fromJson(Map<String, dynamic> json) {
+    return TodoTask(
+      message: json['title'],
+      status: json['done'],
+      taskId: json['id'],
+    );
+  }
 }
 
 class MyState extends ChangeNotifier {
   List<TodoTask> _list = [];
   List<TodoTask> get list => _list;
-  List<TodoTask> _filteredList = [];
-  List<TodoTask> get listFiltered => _filteredList;
 
-  void addTodo(TodoTask todo) {
-    _list.add(todo);
-    _filteredList = list.where((task) => task.message == task.message).toList();
+  Future getList() async {
+    List<TodoTask> list = await Api.getTasks();
+    _list = list;
     notifyListeners();
   }
 
-  void removeTask(TodoTask task) {
-    _list.remove(task);
-    _filteredList.remove(task);
-    notifyListeners();
-  }
-
-  void toggleDone(TodoTask task, bool newValue) {
-    task.status = newValue;
-    notifyListeners();
-  }
-
-  void filterChange(String choice) {
-    Filter.show = choice;
-    filteredList(choice);
-    notifyListeners();
-  }
-
-  List<TodoTask> filteredList(String choice) {
-    _filteredList.clear();
-    if (choice == 'done') {
-      _filteredList = list.where((task) => task.status == true).toList();
-      return _filteredList;
-    } else if (choice == 'undone') {
-      print("notDONE");
-
-      _filteredList = list.where((task) => task.status == false).toList();
-
-      return _filteredList;
-    } else if (choice == 'all') {
-      print("ALL");
-      _filteredList =
-          list.where((task) => task.message == task.message).toList();
-      return _filteredList;
+  void addTodo(TodoTask task) async {
+    if (task.message == null) {
+      await getList();
+    } else {
+      await Api.addTask(task);
+      await getList();
     }
-    return _filteredList;
+  }
+
+  void removeTask(TodoTask task) async {
+    await Api.deleteTask(task.taskId);
+    await getList();
+  }
+
+  void toggleDone(TodoTask task, bool newValue) async {
+    task.status = newValue;
+    await Api.updateTodos(task);
+    await getList();
+  }
+
+  void filterChange(String choice) async {
+    Filter.show = choice;
+    await Api.getTasks();
+    await getList();
+    filteredList(choice);
+
+    notifyListeners();
+  }
+
+  void filteredList(String choice) {
+    if (choice == 'all') {
+      _list = list.toList();
+    } else if (choice == 'undone') {
+      _list = list.where((task) => task.status == false).toList();
+    } else if (choice == 'done') {
+      _list = list.where((task) => task.status == true).toList();
+    }
   }
 }

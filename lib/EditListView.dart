@@ -81,17 +81,49 @@ class EditListviewState extends State<EditListview> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         FlatButton.icon(
-          shape: new RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)),
-          color: Colors.white30,
-          icon: Icon(Icons.add_rounded, color: Colors.white, size: 25.0),
-          label: Text('ADD',
-              style: TextStyle(color: Colors.white, fontSize: 20.0)),
+            shape: new RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)),
+            color: Colors.white30,
+            icon: Icon(Icons.add_rounded, color: Colors.white, size: 25.0),
+            label: Text('ADD',
+                style: TextStyle(color: Colors.white, fontSize: 20.0)),
+            onPressed: () {
+              if (message.isEmpty) {
+                showAlertDialog(context);
+              } else {
+                Navigator.pop(
+                    context, TodoTask(message: message, status: status));
+              }
+            })
+      ],
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Color.fromARGB(225, 211, 196, 190),
+      title: Text(
+        'Error',
+        style: TextStyle(color: Colors.white, fontSize: 20),
+      ),
+      content: Text('Task can not be empty',
+          style: TextStyle(color: Colors.white, fontSize: 18)),
+      actions: [
+        FlatButton(
+          child:
+              Text('OK', style: TextStyle(color: Colors.white, fontSize: 18)),
           onPressed: () {
-            Navigator.pop(context, TodoTask(message: message, status: status));
+            Navigator.of(context).pop();
           },
         )
       ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 

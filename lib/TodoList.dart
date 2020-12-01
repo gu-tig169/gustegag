@@ -4,15 +4,14 @@ import 'Model.dart';
 import 'package:provider/provider.dart';
 
 class TodoList extends StatelessWidget {
-  final List<TodoTask> listFiltered;
+  final List<TodoTask> _list;
 
-  TodoList(this.listFiltered);
+  TodoList(this._list);
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-        children:
-            listFiltered.map((task) => todoWidget(context, task)).toList());
+        children: _list.map((task) => todoWidget(context, task)).toList());
   }
 
   Widget todoWidget(context, task) {
